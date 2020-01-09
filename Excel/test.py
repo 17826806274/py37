@@ -1,20 +1,38 @@
-# -*- conding:utf-8 -*-
-#Author:wzf
+# -*- coding:utf-8 -*-
+import requests
+import bs4
+import re
+import time
 
-import xlrd
-import os
-workbook = xlrd.open_workbook('z.xlsx');
 
-print(workbook.sheet_names())
+res = requests.get('http://www.runoob.com/')
+res.raise_for_status()
+res.encoding = 'utf-8'
+bs = bs4.BeautifulSoup(res.text,"html5lib")
+h4_list = bs.select('h4')
 
-Data_sheet = workbook.sheets()[1];
-print(Data_sheet.name,Data_sheet.nrows,Data_sheet.ncols)
-rows = Data_sheet.row_values(17) #获取第一行内容
-cols = Data_sheet.col_values(1) #获取第二列内容
-cell_A1 = Data_sheet.cell(15,4)
+def write_file(txt):
+    f1 = open('web4.txt','a',encoding='utf8')
+    f1.write(txt)
+    f1.close()
 
-hebing = workbook.sheet_by_index(1)
-for hb in hebing.merged_cells:
-    rs,re,cs,ce = hb
-    print(hb)
+def local_time():
+    return(time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()))
+
+
+#write_file('\n'+str(h4_list))
+for h4 in bs.find_all('h4'):
+    matchobj = re.match(r'【',h4.string)
+    if matchobj:
+        time1 = local_time()
+        write_file(time1 +' '+ h4.string + '\n' )
+
+
+
+
+#get_text 循环
+'''
+for i in h4_list:
+    print(i.get_text())
+'''
 
