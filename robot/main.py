@@ -1,6 +1,6 @@
 # -*- conding:utf-8 -*-
 
-import robot.r.test1
+import robot.r.Sendmessage
 
-robot.r.test1.SendMessage()
+robot.r.Sendmessage.SendMessage()
 
